@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "664145099003",
+    "project_id": "spypw-14de9",
+    "storage_bucket": "spypw-14de9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664145099003:android:1a4d5ad905929433d8585e",
+        "android_client_info": {
+          "package_name": "pl.pw.booking_pw"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDlBNVUkYRhQrEwUhppuaA4yMq2N3luJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
