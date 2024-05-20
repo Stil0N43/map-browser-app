@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:ancient_maps/firebase_options.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,19 +20,6 @@ void main() {
         debugShowCheckedModeBanner: false));
   });
 }
-
-// class ToastUtils {
-//   static void showToast(String messageKey, BuildContext context) {
-//     Fluttertoast.showToast(
-//       msg: AppLocaleUtils.of(context).translate(messageKey),
-//       toastLength: Toast.LENGTH_SHORT,
-//       gravity: ToastGravity.CENTER,
-//       backgroundColor: Colors.black,
-//       textColor: Colors.white,
-//       fontSize: Dimens.fontSizeStandard,
-//     );
-//   }
-// }
 
 final emailController = TextEditingController();
 final passwordController = TextEditingController();
@@ -281,19 +268,86 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 }
 
-class ThirdRoute extends StatelessWidget {
+class ThirdRoute extends StatefulWidget {
   const ThirdRoute({super.key});
+
+  @override
+  State<ThirdRoute> createState() => _ThirdRouteState();
+}
+
+class _ThirdRouteState extends State<ThirdRoute> {
+  String pageTitle = 'Map Page: Open Street Map';
+  String mapLink = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  // ApiKey is stored somewhere else. You gotta add it tho
+  String apiKey = '';
+
+  void changeMap(String mL, String pT) {
+    setState(() {
+      mapLink = mL;
+      pageTitle = pT;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Map Page'),
+        title: Text(pageTitle),
       ),
-      body: Center(
-        child: Column(
-          children: [const Text('Map page')],
-        ),
+      body: Stack(
+        children: [
+          FlutterMap(
+            options: MapOptions(
+                center: LatLng(52.220537662823844, 21.01063312851598),
+                zoom: 10,
+                minZoom: 10,
+                maxZoom: 18
+                // apikey: '059455e4eb924d629ec71dcfb0ecd994'
+                ),
+            children: [
+              TileLayer(urlTemplate: mapLink, additionalOptions: {
+                'apikey': '059455e4eb924d629ec71dcfb0ecd994'
+              }),
+            ],
+          ),
+        ],
+      ),
+      floatingActionButton: Wrap(
+        direction: Axis.vertical,
+        children: <Widget>[
+          Container(
+              margin: EdgeInsets.all(10),
+              child: FloatingActionButton(
+                onPressed: () {
+                  changeMap('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      'Map Page: OpenStreetMap');
+                },
+                backgroundColor: Colors.white,
+                child: Icon(Icons.add_road),
+              )),
+          Container(
+              margin: EdgeInsets.all(10),
+              child: FloatingActionButton(
+                onPressed: () {
+                  changeMap(
+                      'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=$apiKey',
+                      'Map Page: TransportDark');
+                },
+                backgroundColor: Colors.deepPurple,
+                child: Icon(Icons.add_road),
+              )),
+          Container(
+              margin: EdgeInsets.all(10),
+              child: FloatingActionButton(
+                onPressed: () {
+                  changeMap(
+                      'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=$apiKey',
+                      'Map Page: SpinalMap');
+                },
+                backgroundColor: Colors.deepOrange,
+                child: Icon(Icons.add_road),
+              )),
+        ],
       ),
     );
   }
